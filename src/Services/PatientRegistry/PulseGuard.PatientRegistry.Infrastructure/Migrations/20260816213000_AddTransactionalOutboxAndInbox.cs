@@ -7,6 +7,9 @@ namespace PulseGuard.PatientRegistry.Infrastructure.Migrations;
 [Migration("20260816213000_AddTransactionalOutboxAndInbox")]
 public sealed partial class AddTransactionalOutboxAndInbox : Migration
 {
+    private static readonly string[] InboxPendingColumns = ["processed_on_utc", "received_on_utc"];
+    private static readonly string[] OutboxPendingColumns = ["published_on_utc", "occurred_on_utc"];
+
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.CreateTable(
@@ -46,13 +49,13 @@ public sealed partial class AddTransactionalOutboxAndInbox : Migration
             name: "ix_inbox_messages_pending",
             schema: "patient_registry",
             table: "inbox_messages",
-            columns: new[] { "processed_on_utc", "received_on_utc" });
+            columns: InboxPendingColumns);
 
         migrationBuilder.CreateIndex(
             name: "ix_outbox_messages_pending",
             schema: "patient_registry",
             table: "outbox_messages",
-            columns: new[] { "published_on_utc", "occurred_on_utc" });
+            columns: OutboxPendingColumns);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
