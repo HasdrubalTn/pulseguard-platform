@@ -8,6 +8,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
     <ProjectReference Include="../PulseGuard.Framework.Domain/PulseGuard.Framework.Domain.csproj" />
     <ProjectReference Include="../PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
   </ItemGroup>
