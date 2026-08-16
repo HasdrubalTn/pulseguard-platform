@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using PulseGuard.Framework.Cqrs;
 using PulseGuard.Framework.Security;
 using PulseGuard.PatientRegistry.Application;

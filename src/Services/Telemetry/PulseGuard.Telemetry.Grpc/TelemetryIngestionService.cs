@@ -3,7 +3,7 @@ using PulseGuard.Telemetry.Contracts;
 
 namespace PulseGuard.Telemetry.Grpc;
 
-public sealed class TelemetryIngestionService(ILogger<TelemetryIngestionService> logger)
+public sealed partial class TelemetryIngestionService(ILogger<TelemetryIngestionService> logger)
     : TelemetryIngestor.TelemetryIngestorBase
 {
     public override async Task<IngestionSummary> Ingest(
@@ -18,8 +18,8 @@ public sealed class TelemetryIngestionService(ILogger<TelemetryIngestionService>
             if (IsValid(measurement))
             {
                 accepted++;
-                logger.LogDebug(
-                    "Accepted {VitalType} measurement {MeasurementId} from device {DeviceId}",
+                LogMeasurementAccepted(
+                    logger,
                     measurement.Type,
                     measurement.MeasurementId,
                     measurement.DeviceId);
@@ -27,7 +27,7 @@ public sealed class TelemetryIngestionService(ILogger<TelemetryIngestionService>
             else
             {
                 rejected++;
-                logger.LogWarning("Rejected malformed telemetry measurement {MeasurementId}", measurement.MeasurementId);
+                LogMeasurementRejected(logger, measurement.MeasurementId);
             }
         }
 
@@ -42,4 +42,20 @@ public sealed class TelemetryIngestionService(ILogger<TelemetryIngestionService>
         !double.IsNaN(measurement.Value) &&
         !double.IsInfinity(measurement.Value) &&
         measurement.MeasuredAtUtc is not null;
+
+    [LoggerMessage(
+        EventId = 2000,
+        Level = LogLevel.Debug,
+        Message = "Accepted {VitalType} measurement {MeasurementId} from device {DeviceId}")]
+    private static partial void LogMeasurementAccepted(
+        ILogger logger,
+        VitalType vitalType,
+        string measurementId,
+        string deviceId);
+
+    [LoggerMessage(
+        EventId = 2001,
+        Level = LogLevel.Warning,
+        Message = "Rejected malformed telemetry measurement {MeasurementId}")]
+    private static partial void LogMeasurementRejected(ILogger logger, string measurementId);
 }

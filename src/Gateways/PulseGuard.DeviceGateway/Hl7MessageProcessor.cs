@@ -3,7 +3,7 @@ using PulseGuard.Framework.Messaging;
 
 namespace PulseGuard.DeviceGateway;
 
-public sealed class Hl7MessageProcessor(
+public sealed partial class Hl7MessageProcessor(
     Hl7MessageParser parser,
     Hl7AcknowledgementFactory acknowledgementFactory,
     IIntegrationEventPublisher publisher,
@@ -15,8 +15,8 @@ public sealed class Hl7MessageProcessor(
         Hl7Message message = parser.Parse(payload);
 
         // Raw clinical payloads are intentionally excluded from logs to avoid leaking sensitive data.
-        logger.LogInformation(
-            "Received HL7 {MessageCode}^{TriggerEvent} with control ID {ControlId} from {SendingApplication}",
+        LogMessageReceived(
+            logger,
             message.MessageCode,
             message.TriggerEvent,
             message.ControlId,
@@ -35,4 +35,15 @@ public sealed class Hl7MessageProcessor(
         await publisher.PublishAsync(integrationEvent, cancellationToken).ConfigureAwait(false);
         return acknowledgementFactory.CreateApplicationAccept(message);
     }
+
+    [LoggerMessage(
+        EventId = 1200,
+        Level = LogLevel.Information,
+        Message = "Received HL7 {MessageCode}^{TriggerEvent} with control ID {ControlId} from {SendingApplication}")]
+    private static partial void LogMessageReceived(
+        ILogger logger,
+        string messageCode,
+        string triggerEvent,
+        string controlId,
+        string sendingApplication);
 }

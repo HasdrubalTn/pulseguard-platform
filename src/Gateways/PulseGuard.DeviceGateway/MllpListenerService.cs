@@ -6,7 +6,7 @@ using PulseGuard.Framework.Hl7;
 
 namespace PulseGuard.DeviceGateway;
 
-public sealed class MllpListenerService(
+public sealed partial class MllpListenerService(
     IOptions<MllpListenerOptions> options,
     Hl7MessageProcessor processor,
     ILogger<MllpListenerService> logger) : BackgroundService
@@ -21,7 +21,7 @@ public sealed class MllpListenerService(
         _listener = new TcpListener(bindAddress, _options.Port);
         _listener.Start();
 
-        logger.LogInformation("HL7 MLLP listener started on {Address}:{Port}", bindAddress, _options.Port);
+        LogListenerStarted(logger, bindAddress, _options.Port);
 
         try
         {
@@ -43,7 +43,7 @@ public sealed class MllpListenerService(
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {
-            logger.LogInformation("HL7 MLLP listener is stopping");
+            LogListenerStopping(logger);
         }
         finally
         {
@@ -77,12 +77,12 @@ public sealed class MllpListenerService(
             }
             catch (Exception exception) when (exception is IOException or SocketException or FormatException or InvalidDataException)
             {
-                logger.LogWarning(exception, "HL7 MLLP client connection ended with a protocol or transport error");
+                LogClientProtocolOrTransportError(logger, exception);
             }
             catch (Exception exception)
             {
                 // The per-connection boundary must observe every fault because clients run concurrently.
-                logger.LogError(exception, "Unexpected failure while processing an HL7 MLLP client connection");
+                LogUnexpectedClientFailure(logger, exception);
             }
         }
     }
@@ -120,4 +120,25 @@ public sealed class MllpListenerService(
         _listener?.Stop();
         base.Dispose();
     }
+
+    [LoggerMessage(
+        EventId = 1100,
+        Level = LogLevel.Information,
+        Message = "HL7 MLLP listener started on {Address}:{Port}")]
+    private static partial void LogListenerStarted(ILogger logger, IPAddress address, int port);
+
+    [LoggerMessage(EventId = 1101, Level = LogLevel.Information, Message = "HL7 MLLP listener is stopping")]
+    private static partial void LogListenerStopping(ILogger logger);
+
+    [LoggerMessage(
+        EventId = 1102,
+        Level = LogLevel.Warning,
+        Message = "HL7 MLLP client connection ended with a protocol or transport error")]
+    private static partial void LogClientProtocolOrTransportError(ILogger logger, Exception exception);
+
+    [LoggerMessage(
+        EventId = 1103,
+        Level = LogLevel.Error,
+        Message = "Unexpected failure while processing an HL7 MLLP client connection")]
+    private static partial void LogUnexpectedClientFailure(ILogger logger, Exception exception);
 }
