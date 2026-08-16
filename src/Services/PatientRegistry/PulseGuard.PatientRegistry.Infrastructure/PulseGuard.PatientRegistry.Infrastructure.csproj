@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../PulseGuard.PatientRegistry.Application/PulseGuard.PatientRegistry.Application.csproj" />
+  </ItemGroup>
+</Project>

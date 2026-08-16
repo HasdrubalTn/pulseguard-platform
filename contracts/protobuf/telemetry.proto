@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "PulseGuard.Telemetry.Contracts";
+
+package pulseguard.telemetry.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service TelemetryIngestor {
+  rpc Ingest(stream VitalMeasurement) returns (IngestionSummary);
+}
+
+message VitalMeasurement {
+  string measurement_id = 1;
+  string patient_id = 2;
+  string device_id = 3;
+  VitalType type = 4;
+  double value = 5;
+  string unit = 6;
+  google.protobuf.Timestamp measured_at_utc = 7;
+}
+
+enum VitalType {
+  VITAL_TYPE_UNSPECIFIED = 0;
+  VITAL_TYPE_HEART_RATE = 1;
+  VITAL_TYPE_OXYGEN_SATURATION = 2;
+  VITAL_TYPE_TEMPERATURE = 3;
+  VITAL_TYPE_RESPIRATORY_RATE = 4;
+  VITAL_TYPE_SYSTOLIC_BLOOD_PRESSURE = 5;
+  VITAL_TYPE_DIASTOLIC_BLOOD_PRESSURE = 6;
+}
+
+message IngestionSummary {
+  int32 accepted = 1;
+  int32 rejected = 2;
+}

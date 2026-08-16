@@ -1,0 +1,22 @@
+{
+  "name": "pulseguard-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Repository quality gates for the PulseGuard .NET platform",
+  "scripts": {
+    "prepare": "husky",
+    "commitlint": "commitlint --edit",
+    "format:check": "dotnet format PulseGuard.slnx --verify-no-changes --no-restore",
+    "build": "dotnet build PulseGuard.slnx --configuration Release --no-restore",
+    "test": "dotnet test PulseGuard.slnx --configuration Release --no-build",
+    "verify": "dotnet restore PulseGuard.slnx && npm run format:check && npm run build && npm run test"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "husky": "9.1.7"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PulseGuard.Framework.Cqrs</PackageId>
+    <Description>Dependency-free CQRS contracts for PulseGuard application layers.</Description>
+  </PropertyGroup>
+</Project>

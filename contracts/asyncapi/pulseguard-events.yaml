@@ -1,0 +1,53 @@
+asyncapi: 3.0.0
+info:
+  title: PulseGuard Integration Events
+  version: 0.1.0
+  description: Versioned events emitted by PulseGuard bounded contexts. All examples are synthetic.
+channels:
+  hl7MessageReceived:
+    address: pulseguard.interoperability.hl7-message-received.v1
+    messages:
+      hl7MessageReceived:
+        $ref: '#/components/messages/Hl7MessageReceived'
+operations:
+  publishHl7MessageReceived:
+    action: send
+    channel:
+      $ref: '#/channels/hl7MessageReceived'
+components:
+  messages:
+    Hl7MessageReceived:
+      name: Hl7MessageReceived
+      title: HL7 message envelope accepted
+      payload:
+        $ref: '#/components/schemas/Hl7MessageReceivedPayload'
+  schemas:
+    Hl7MessageReceivedPayload:
+      type: object
+      additionalProperties: false
+      required:
+        - eventId
+        - occurredOnUtc
+        - schemaVersion
+        - messageCode
+        - controlId
+      properties:
+        eventId:
+          type: string
+          format: uuid
+        occurredOnUtc:
+          type: string
+          format: date-time
+        schemaVersion:
+          type: integer
+          const: 1
+        messageCode:
+          type: string
+        triggerEvent:
+          type: string
+        controlId:
+          type: string
+        sendingApplication:
+          type: string
+        sendingFacility:
+          type: string
