@@ -27,6 +27,10 @@ jobs:
           cache: true
           cache-dependency-path: Directory.Packages.props
 
+      - name: Verify Windows PowerShell compatibility
+        shell: powershell
+        run: ./eng/test-development-secrets.ps1
+
       - name: Verify solution
         shell: pwsh
         run: ./eng/verify.ps1 -CollectCoverage

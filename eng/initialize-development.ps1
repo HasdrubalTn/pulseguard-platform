@@ -8,12 +8,9 @@ $identityProject = Join-Path $repositoryRoot 'src/Identity/PulseGuard.Identity/P
 $deviceGatewayProject = Join-Path $repositoryRoot 'src/Gateways/PulseGuard.DeviceGateway/PulseGuard.DeviceGateway.csproj'
 $patientRegistryProject = Join-Path $repositoryRoot 'src/Services/PatientRegistry/PulseGuard.PatientRegistry.Api/PulseGuard.PatientRegistry.Api.csproj'
 $environmentFile = Join-Path $repositoryRoot '.env'
+$secretFunctions = Join-Path $PSScriptRoot 'functions/development-secrets.ps1'
 
-function New-DevelopmentSecret {
-    $secretBytes = [byte[]]::new(32)
-    [System.Security.Cryptography.RandomNumberGenerator]::Fill($secretBytes)
-    return [Convert]::ToBase64String($secretBytes)
-}
+. $secretFunctions
 
 function Get-OrCreateEnvironmentSecret {
     param(
@@ -53,11 +50,13 @@ if ($LASTEXITCODE -ne 0) {
     throw 'Unable to store the Device Gateway RabbitMQ password with .NET User Secrets.'
 }
 
-@(
+$environmentValues = @(
     "POSTGRES_PASSWORD=$postgresPassword"
     'RABBITMQ_DEFAULT_USER=pulseguard'
     "RABBITMQ_DEFAULT_PASS=$rabbitMqPassword"
-) | Set-Content -Path $environmentFile -Encoding utf8NoBOM
+)
+
+Set-Utf8NoBomContent -Path $environmentFile -Value $environmentValues
 
 Write-Host 'Development configuration initialized.'
 Write-Host 'PostgreSQL and RabbitMQ credentials were generated and stored in the ignored .env file.'
