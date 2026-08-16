@@ -30,3 +30,27 @@ function Set-Utf8NoBomContent {
     $utf8WithoutBom = New-Object System.Text.UTF8Encoding $false
     [System.IO.File]::WriteAllLines($Path, $Value, $utf8WithoutBom)
 }
+
+function Get-EnvironmentFileValue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $Path,
+
+        [Parameter(Mandatory)]
+        [string] $Name
+    )
+
+    if (-not (Test-Path $Path)) {
+        return $null
+    }
+
+    $match = Select-String -Path $Path -Pattern "^$([regex]::Escape($Name))=(.*)$" |
+        Select-Object -First 1
+
+    if ($null -eq $match) {
+        return $null
+    }
+
+    return $match.Matches[0].Groups[1].Value
+}
