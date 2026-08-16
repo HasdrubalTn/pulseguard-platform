@@ -17,7 +17,10 @@ if ($secretBytes.Length -ne 32) {
 $testFile = Join-Path ([System.IO.Path]::GetTempPath()) "pulseguard-$([Guid]::NewGuid()).env"
 
 try {
-    Set-Utf8NoBomContent -Path $testFile -Value @('PULSEGUARD_TEST=value')
+    Set-Utf8NoBomContent -Path $testFile -Value @(
+        'PULSEGUARD_TEST=value'
+        'PULSEGUARD_SECRET=abc=def=='
+    )
     $fileBytes = [System.IO.File]::ReadAllBytes($testFile)
 
     if ($fileBytes.Length -ge 3 -and
@@ -25,6 +28,16 @@ try {
         $fileBytes[1] -eq 0xBB -and
         $fileBytes[2] -eq 0xBF) {
         throw 'Expected UTF-8 content without a byte order mark.'
+    }
+
+    $environmentValue = Get-EnvironmentFileValue -Path $testFile -Name 'PULSEGUARD_SECRET'
+    if ($environmentValue -ne 'abc=def==') {
+        throw 'Expected the complete environment value, including equals signs.'
+    }
+
+    $missingValue = Get-EnvironmentFileValue -Path $testFile -Name 'PULSEGUARD_MISSING'
+    if ($null -ne $missingValue) {
+        throw 'Expected a missing environment value to return null.'
     }
 }
 finally {

@@ -18,13 +18,9 @@ function Get-OrCreateEnvironmentSecret {
         [string] $Name
     )
 
-    if (Test-Path $environmentFile) {
-        $match = Select-String -Path $environmentFile -Pattern "^$([regex]::Escape($Name))=(.+)$" |
-            Select-Object -First 1
-
-        if ($null -ne $match) {
-            return $match.Matches[0].Groups[1].Value
-        }
+    $existingSecret = Get-EnvironmentFileValue -Path $environmentFile -Name $Name
+    if (-not [string]::IsNullOrWhiteSpace($existingSecret)) {
+        return $existingSecret
     }
 
     return New-DevelopmentSecret
@@ -60,5 +56,11 @@ Set-Utf8NoBomContent -Path $environmentFile -Value $environmentValues
 
 Write-Host 'Development configuration initialized.'
 Write-Host 'PostgreSQL and RabbitMQ credentials were generated and stored in the ignored .env file.'
-Write-Host 'Copy the following one-time value into the Postman clientSecret variable:'
-Write-Host $clientSecret
+
+if ($null -ne (Get-Command 'Set-Clipboard' -ErrorAction SilentlyContinue)) {
+    Set-Clipboard -Value $clientSecret
+    Write-Host 'The Postman client secret was copied to the Windows clipboard.'
+}
+else {
+    Write-Warning 'Set-Clipboard is unavailable. The Postman client secret remains stored in .NET User Secrets and was not displayed.'
+}
