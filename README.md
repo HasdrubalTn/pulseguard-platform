@@ -52,7 +52,7 @@ npm run prepare
 .\eng\verify.ps1
 ```
 
-Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre la chaîne PostgreSQL ainsi que le mot de passe RabbitMQ avec `.NET User Secrets`. Le secret client Duende est affiché une seule fois afin de le copier dans la variable Postman `clientSecret`, marquée comme secret. Aucune credential n'est versionnée.
+Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre la chaîne PostgreSQL ainsi que le mot de passe RabbitMQ avec `.NET User Secrets`. Le secret client Duende est copié dans le presse-papiers Windows afin de le transférer dans la variable Postman `clientSecret`, marquée comme secret, sans l'afficher dans le terminal. Aucune credential n'est versionnée.
 
 Les migrations PostgreSQL peuvent aussi être appliquées explicitement :
 
