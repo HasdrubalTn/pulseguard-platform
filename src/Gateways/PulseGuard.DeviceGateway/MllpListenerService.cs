@@ -99,7 +99,17 @@ public sealed partial class MllpListenerService(
             using CancellationTokenSource readTimeout = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
             readTimeout.CancelAfter(TimeSpan.FromSeconds(_options.ReadTimeoutSeconds));
 
-            int bytesRead = await stream.ReadAsync(buffer, readTimeout.Token).ConfigureAwait(false);
+            int bytesRead;
+            try
+            {
+                bytesRead = await stream.ReadAsync(buffer, readTimeout.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (!stoppingToken.IsCancellationRequested)
+            {
+                LogClientReadTimeout(logger, _options.ReadTimeoutSeconds);
+                return;
+            }
+
             if (bytesRead == 0)
             {
                 return;
@@ -141,4 +151,10 @@ public sealed partial class MllpListenerService(
         Level = LogLevel.Error,
         Message = "Unexpected failure while processing an HL7 MLLP client connection")]
     private static partial void LogUnexpectedClientFailure(ILogger logger, Exception exception);
+
+    [LoggerMessage(
+        EventId = 1104,
+        Level = LogLevel.Warning,
+        Message = "HL7 MLLP client read timed out after {ReadTimeoutSeconds} seconds")]
+    private static partial void LogClientReadTimeout(ILogger logger, int readTimeoutSeconds);
 }

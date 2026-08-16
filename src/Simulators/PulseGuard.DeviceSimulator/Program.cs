@@ -15,16 +15,38 @@ string message = string.Join(
     string.Empty);
 
 using TcpClient client = new();
-await client.ConnectAsync(host, port);
+using CancellationTokenSource operationTimeout = new(TimeSpan.FromSeconds(10));
+await client.ConnectAsync(host, port, operationTimeout.Token);
 await using NetworkStream stream = client.GetStream();
 
 byte[] request = MllpProtocol.Frame(message);
-await stream.WriteAsync(request);
+await stream.WriteAsync(request, operationTimeout.Token);
 
-byte[] responseBuffer = new byte[16 * 1024];
-int bytesRead = await stream.ReadAsync(responseBuffer);
 MllpFrameDecoder decoder = new();
-byte[] acknowledgement = decoder.Feed(responseBuffer.AsSpan(0, bytesRead)).Single();
+byte[] acknowledgement = await ReadFrameAsync(stream, decoder, operationTimeout.Token);
 Hl7Message parsedAcknowledgement = Hl7MessageParser.Parse(Encoding.UTF8.GetString(acknowledgement));
 
 Console.WriteLine($"Received {parsedAcknowledgement.MessageCode} for control ID {parsedAcknowledgement.FindSegment("MSA")?.GetField(2)}");
+
+static async Task<byte[]> ReadFrameAsync(
+    NetworkStream stream,
+    MllpFrameDecoder decoder,
+    CancellationToken cancellationToken)
+{
+    byte[] buffer = new byte[16 * 1024];
+
+    while (true)
+    {
+        int bytesRead = await stream.ReadAsync(buffer, cancellationToken);
+        if (bytesRead == 0)
+        {
+            throw new EndOfStreamException("The MLLP connection closed before a complete acknowledgement was received.");
+        }
+
+        IReadOnlyList<byte[]> frames = decoder.Feed(buffer.AsSpan(0, bytesRead));
+        if (frames.Count > 0)
+        {
+            return frames[0];
+        }
+    }
+}
