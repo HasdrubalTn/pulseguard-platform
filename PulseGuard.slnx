@@ -1,0 +1,33 @@
+<Solution>
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/PulseGuard.Framework.Cqrs/PulseGuard.Framework.Cqrs.csproj" />
+    <Project Path="src/BuildingBlocks/PulseGuard.Framework.Domain/PulseGuard.Framework.Domain.csproj" />
+    <Project Path="src/BuildingBlocks/PulseGuard.Framework.Hl7/PulseGuard.Framework.Hl7.csproj" />
+    <Project Path="src/BuildingBlocks/PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+    <Project Path="src/BuildingBlocks/PulseGuard.Framework.Security/PulseGuard.Framework.Security.csproj" />
+  </Folder>
+  <Folder Name="/src/Gateways/">
+    <Project Path="src/Gateways/PulseGuard.DeviceGateway/PulseGuard.DeviceGateway.csproj" />
+  </Folder>
+  <Folder Name="/src/Identity/">
+    <Project Path="src/Identity/PulseGuard.Identity/PulseGuard.Identity.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/PatientRegistry/">
+    <Project Path="src/Services/PatientRegistry/PulseGuard.PatientRegistry.Api/PulseGuard.PatientRegistry.Api.csproj" />
+    <Project Path="src/Services/PatientRegistry/PulseGuard.PatientRegistry.Application/PulseGuard.PatientRegistry.Application.csproj" />
+    <Project Path="src/Services/PatientRegistry/PulseGuard.PatientRegistry.Contracts/PulseGuard.PatientRegistry.Contracts.csproj" />
+    <Project Path="src/Services/PatientRegistry/PulseGuard.PatientRegistry.Domain/PulseGuard.PatientRegistry.Domain.csproj" />
+    <Project Path="src/Services/PatientRegistry/PulseGuard.PatientRegistry.Infrastructure/PulseGuard.PatientRegistry.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Telemetry/">
+    <Project Path="src/Services/Telemetry/PulseGuard.Telemetry.Grpc/PulseGuard.Telemetry.Grpc.csproj" />
+  </Folder>
+  <Folder Name="/src/Simulators/">
+    <Project Path="src/Simulators/PulseGuard.DeviceSimulator/PulseGuard.DeviceSimulator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PulseGuard.ArchitectureTests/PulseGuard.ArchitectureTests.csproj" />
+    <Project Path="tests/PulseGuard.Framework.Hl7.UnitTests/PulseGuard.Framework.Hl7.UnitTests.csproj" />
+    <Project Path="tests/PulseGuard.PatientRegistry.UnitTests/PulseGuard.PatientRegistry.UnitTests.csproj" />
+  </Folder>
+</Solution>

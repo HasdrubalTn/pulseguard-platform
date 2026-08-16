@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PulseGuard.Framework.Messaging</PackageId>
+    <Description>Versioned integration event contracts and publisher abstractions.</Description>
+  </PropertyGroup>
+</Project>

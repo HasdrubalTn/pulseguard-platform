@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <UserSecretsId>PulseGuard.Identity-8d35c799-cc42-42b5-844a-33d85aa7f15f</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Duende.IdentityServer" />
+  </ItemGroup>
+</Project>

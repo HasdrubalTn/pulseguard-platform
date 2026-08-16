@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-pack:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: Directory.Packages.props
+
+      - name: Verify solution
+        shell: pwsh
+        run: ./eng/verify.ps1 -CollectCoverage
+
+      - name: Pack building blocks
+        shell: pwsh
+        run: dotnet pack PulseGuard.slnx --configuration Release --no-build --output artifacts/packages
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulseguard-nuget-packages
+          path: artifacts/packages/*.*nupkg
+          if-no-files-found: error

@@ -47,8 +47,11 @@ Le workflow développeur et la CI sont Windows-first. Les projets .NET restent p
 ```powershell
 npm install
 npm run prepare
+.\eng\initialize-development.ps1
 .\eng\verify.ps1
 ```
+
+Le script génère un secret client aléatoire, l'enregistre avec `.NET User Secrets` et l'affiche une seule fois afin de le copier dans la variable Postman `clientSecret`, marquée comme secret. Aucune credential n'est versionnée.
 
 ## Démarrage local
 

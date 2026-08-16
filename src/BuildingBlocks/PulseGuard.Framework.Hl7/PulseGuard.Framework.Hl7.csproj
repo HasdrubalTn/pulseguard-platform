@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PulseGuard.Framework.Hl7</PackageId>
+    <Description>Defensive HL7 v2 ER7 parsing and MLLP framing primitives.</Description>
+  </PropertyGroup>
+</Project>

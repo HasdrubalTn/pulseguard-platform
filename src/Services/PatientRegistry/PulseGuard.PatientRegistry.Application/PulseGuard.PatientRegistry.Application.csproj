@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Cqrs/PulseGuard.Framework.Cqrs.csproj" />
+    <ProjectReference Include="../PulseGuard.PatientRegistry.Domain/PulseGuard.PatientRegistry.Domain.csproj" />
+  </ItemGroup>
+</Project>

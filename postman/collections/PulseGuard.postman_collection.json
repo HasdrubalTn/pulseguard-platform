@@ -1,0 +1,73 @@
+{
+  "info": {
+    "_postman_id": "13df1bb9-f018-4e31-8901-cfef116e026b",
+    "name": "PulseGuard Platform",
+    "description": "Synthetic-data scenarios for Duende OIDC, REST, and FHIR R4.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Get OIDC token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Token returned', function () { pm.response.to.have.status(200); });",
+              "pm.environment.set('accessToken', pm.response.json().access_token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "grant_type", "value": "client_credentials", "type": "text" },
+            { "key": "client_id", "value": "pulseguard.postman", "type": "text" },
+            { "key": "client_secret", "value": "{{clientSecret}}", "type": "text" },
+            { "key": "scope", "value": "pulseguard.patient.read pulseguard.patient.write", "type": "text" }
+          ]
+        },
+        "url": "{{identityBaseUrl}}/connect/token"
+      }
+    },
+    {
+      "name": "02 - Register synthetic patient",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Patient created', function () { pm.response.to.have.status(201); });",
+              "pm.environment.set('patientId', pm.response.json().id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"medicalRecordNumber\": \"SYNTH-{{$timestamp}}\",\n  \"givenName\": \"Jane\",\n  \"familyName\": \"Doe\",\n  \"birthDate\": \"1980-01-01\"\n}"
+        },
+        "url": "{{patientApiBaseUrl}}/api/patients"
+      }
+    },
+    {
+      "name": "03 - Get FHIR R4 patient",
+      "request": {
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/fhir+json" }],
+        "url": "{{patientApiBaseUrl}}/fhir/Patient/{{patientId}}"
+      }
+    }
+  ]
+}

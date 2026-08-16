@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PulseGuard.Framework.Domain</PackageId>
+    <Description>Minimal domain primitives for PulseGuard bounded contexts.</Description>
+  </PropertyGroup>
+</Project>
