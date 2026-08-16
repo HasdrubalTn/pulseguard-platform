@@ -5,6 +5,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $identityProject = Join-Path $repositoryRoot 'src/Identity/PulseGuard.Identity/PulseGuard.Identity.csproj'
+$deviceGatewayProject = Join-Path $repositoryRoot 'src/Gateways/PulseGuard.DeviceGateway/PulseGuard.DeviceGateway.csproj'
 $patientRegistryProject = Join-Path $repositoryRoot 'src/Services/PatientRegistry/PulseGuard.PatientRegistry.Api/PulseGuard.PatientRegistry.Api.csproj'
 $environmentFile = Join-Path $repositoryRoot '.env'
 
@@ -45,6 +46,11 @@ if ($LASTEXITCODE -ne 0) {
 & dotnet user-secrets set 'ConnectionStrings:PatientRegistry' $patientRegistryConnectionString --project $patientRegistryProject
 if ($LASTEXITCODE -ne 0) {
     throw 'Unable to store the Patient Registry connection string with .NET User Secrets.'
+}
+
+& dotnet user-secrets set 'Messaging:RabbitMq:Password' $rabbitMqPassword --project $deviceGatewayProject
+if ($LASTEXITCODE -ne 0) {
+    throw 'Unable to store the Device Gateway RabbitMQ password with .NET User Secrets.'
 }
 
 @(

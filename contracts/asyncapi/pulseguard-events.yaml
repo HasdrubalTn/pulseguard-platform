@@ -3,6 +3,11 @@ info:
   title: PulseGuard Integration Events
   version: 0.1.0
   description: Versioned events emitted by PulseGuard bounded contexts. All examples are synthetic.
+servers:
+  localRabbitMq:
+    host: localhost:5672
+    protocol: amqp
+    description: Local RabbitMQ broker started by Docker Desktop.
 channels:
   hl7MessageReceived:
     address: pulseguard.interoperability.hl7-message-received.v1

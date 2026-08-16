@@ -15,7 +15,7 @@
 
 ## Phase 2 — Reliable asynchronous processing
 
-- [ ] RabbitMQ transport adapter
+- [x] RabbitMQ transport adapter with publisher confirms
 - [ ] Transactional Outbox and Inbox
 - [ ] Idempotent telemetry consumer
 - [ ] Retry with backoff and jitter

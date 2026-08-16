@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PulseGuard.Framework.Messaging.RabbitMq</PackageId>
+    <Description>RabbitMQ transport adapter for PulseGuard integration events.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="RabbitMQ.Client" />
+    <ProjectReference Include="../PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+  </ItemGroup>
+</Project>

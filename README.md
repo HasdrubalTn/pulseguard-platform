@@ -16,13 +16,14 @@ Le socle exécutable couvre déjà plusieurs styles de communication, chacun ass
 | HL7 v2.x/MLLP | Réception de messages hospitaliers legacy sur TCP | `PulseGuard.DeviceGateway` |
 | gRPC client streaming | Ingestion efficace des constantes vitales | `PulseGuard.Telemetry.Grpc` |
 | OIDC/OAuth 2.0 | Authentification machine-to-machine et scopes | `PulseGuard.Identity`, basé sur Duende |
-| Integration Events | Découplage entre l'ingestion et les futurs contexts métier | `PulseGuard.Framework.Messaging` |
+| Integration Events | Publication durable et confirmée vers un topic exchange RabbitMQ | `PulseGuard.Framework.Messaging.RabbitMq` |
 
 ```mermaid
 flowchart TD
     HIS["Hospital system"] -->|"HL7 v2 / MLLP"| GW["Device Gateway"]
     DEV["Device simulator"] -->|"gRPC stream"| TEL["Telemetry Ingestion"]
-    GW -->|"Integration Event"| MON["Monitoring context"]
+    GW -->|"Integration Event"| RMQ["RabbitMQ topic exchange"]
+    RMQ --> MON["Monitoring context"]
     TEL --> MON
     API["REST / FHIR API"] --> PAT["Patient Registry"]
     OIDC["Duende OIDC"] --> API
@@ -51,7 +52,7 @@ npm run prepare
 .\eng\verify.ps1
 ```
 
-Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre la chaîne PostgreSQL avec `.NET User Secrets`. Le secret client Duende est affiché une seule fois afin de le copier dans la variable Postman `clientSecret`, marquée comme secret. Aucune credential n'est versionnée.
+Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre la chaîne PostgreSQL ainsi que le mot de passe RabbitMQ avec `.NET User Secrets`. Le secret client Duende est affiché une seule fois afin de le copier dans la variable Postman `clientSecret`, marquée comme secret. Aucune credential n'est versionnée.
 
 Les migrations PostgreSQL peuvent aussi être appliquées explicitement :
 

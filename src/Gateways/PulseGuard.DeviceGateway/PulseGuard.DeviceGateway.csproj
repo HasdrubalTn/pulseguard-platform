@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>pulseguard-device-gateway</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Hl7/PulseGuard.Framework.Hl7.csproj" />
     <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+    <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Messaging.RabbitMq/PulseGuard.Framework.Messaging.RabbitMq.csproj" />
     <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
   </ItemGroup>
 </Project>

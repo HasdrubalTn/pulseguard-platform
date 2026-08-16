@@ -19,7 +19,7 @@ Champs MSH requis :
 - `MSH-10` : message control ID unique ;
 - `MSH-12` : version commençant par `2.`.
 
-Un ACK `AA` confirme l'acceptation applicative. Un ACK `AE` indique une erreur applicative. La sémantique de persistance fiable sera ajoutée avec Outbox/Inbox : un ACK ne doit pas être envoyé avant que le niveau de durabilité promis soit réellement atteint.
+Un ACK `AA` confirme l'acceptation applicative après la confirmation RabbitMQ. Un ACK `AE` indique une erreur applicative. La confirmation du broker ne remplace pas l'atomicité transactionnelle : Outbox/Inbox sera ajoutée dans un prochain incrément afin de fermer la fenêtre entre le traitement HL7 et la publication.
 
 ## Limites explicites
 
