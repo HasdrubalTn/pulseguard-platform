@@ -6,5 +6,6 @@
   <ItemGroup>
     <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Hl7/PulseGuard.Framework.Hl7.csproj" />
     <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+    <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
   </ItemGroup>
 </Project>

@@ -6,5 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Duende.IdentityServer" />
+    <ProjectReference Include="../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
   </ItemGroup>
 </Project>

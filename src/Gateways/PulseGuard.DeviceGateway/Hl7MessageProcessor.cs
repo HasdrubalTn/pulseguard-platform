@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using PulseGuard.Framework.Hl7;
 using PulseGuard.Framework.Messaging;
 
@@ -9,9 +11,21 @@ public sealed partial class Hl7MessageProcessor(
     TimeProvider timeProvider,
     ILogger<Hl7MessageProcessor> logger)
 {
+    private static readonly ActivitySource ActivitySource = new("PulseGuard.DeviceGateway");
+    private static readonly Meter Meter = new("PulseGuard.DeviceGateway");
+    private static readonly Counter<long> AcceptedMessages = Meter.CreateCounter<long>(
+        "pulseguard.hl7.messages.accepted",
+        description: "Number of accepted HL7 v2 messages.");
+
     public async ValueTask<string> ProcessAsync(string payload, CancellationToken cancellationToken)
     {
+        using Activity? activity = ActivitySource.StartActivity("hl7.process", ActivityKind.Consumer);
         Hl7Message message = Hl7MessageParser.Parse(payload);
+
+        activity?.SetTag("messaging.system", "hl7v2");
+        activity?.SetTag("messaging.operation.type", "process");
+        activity?.SetTag("hl7.message.code", message.MessageCode);
+        activity?.SetTag("hl7.trigger.event", message.TriggerEvent);
 
         // Raw clinical payloads are intentionally excluded from logs to avoid leaking sensitive data.
         LogMessageReceived(
@@ -32,6 +46,10 @@ public sealed partial class Hl7MessageProcessor(
             message.SendingFacility);
 
         await publisher.PublishAsync(integrationEvent, cancellationToken).ConfigureAwait(false);
+        AcceptedMessages.Add(
+            1,
+            new KeyValuePair<string, object?>("hl7.message.code", message.MessageCode),
+            new KeyValuePair<string, object?>("hl7.trigger.event", message.TriggerEvent));
         return acknowledgementFactory.CreateApplicationAccept(message);
     }
 

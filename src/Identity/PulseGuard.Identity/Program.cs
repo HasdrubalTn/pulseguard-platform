@@ -1,6 +1,8 @@
+using PulseGuard.Framework.Observability;
 using PulseGuard.Identity;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.AddPulseGuardObservability();
 
 string? licenseKey = builder.Configuration["Duende:LicenseKey"];
 string postmanClientSecret = builder.Configuration["Clients:Postman:ClientSecret"]

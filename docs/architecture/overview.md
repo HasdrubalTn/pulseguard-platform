@@ -8,7 +8,7 @@ PulseGuard apprend à faire évoluer un système sans confondre organisation log
 
 | Bounded Context | Responsabilité | État |
 |---|---|---|
-| Patient Registry | Identité clinique minimale du patient | Premier slice |
+| Patient Registry | Identité clinique minimale du patient | PostgreSQL persistant |
 | Device Management | Enregistrement et affectation des dispositifs | Planifié |
 | Telemetry | Ingestion de mesures volumineuses | Contrat gRPC initial |
 | Monitoring | Sessions, règles et détection des seuils | Planifié |
@@ -16,6 +16,16 @@ PulseGuard apprend à faire évoluer un système sans confondre organisation log
 | Notifications | Canaux et préférences de notification | Planifié |
 | Interoperability | HL7 v2, FHIR et Anti-Corruption Layer | Premier slice |
 | Audit | Accès et actions sensibles | Planifié |
+
+## Observabilité
+
+Tous les hosts utilisent le building block `PulseGuard.Framework.Observability`. Il enrichit les logs, métriques et traces avec le nom du service, sa version et l'environnement, puis les exporte en OTLP lorsque l'export est activé. Le collecteur local écoute sur les ports `4317` et `4318` et utilise un exporter `debug` afin de garder la Phase 1 indépendante d'un backend d'observabilité particulier.
+
+Les attributs de télémétrie ne doivent jamais contenir un payload HL7 brut, un secret ou une donnée clinique. Les identifiants techniques et les types de messages sont autorisés lorsqu'ils sont nécessaires au diagnostic.
+
+## Persistance Patient Registry
+
+L'Application dépend uniquement de `IPatientRepository`. L'Infrastructure fournit `PostgresPatientRepository` avec EF Core et Npgsql, un mapping explicite du strong ID `PatientId`, une contrainte unique sur le numéro de dossier médical et une migration versionnée. Le schema PostgreSQL `patient_registry` évite le couplage de tables entre bounded contexts.
 
 ## Clean Architecture d'un contexte
 

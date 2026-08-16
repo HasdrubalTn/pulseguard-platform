@@ -1,3 +1,4 @@
+using System.Diagnostics.Metrics;
 using Grpc.Core;
 using PulseGuard.Telemetry.Contracts;
 
@@ -6,6 +7,14 @@ namespace PulseGuard.Telemetry.Grpc;
 public sealed partial class TelemetryIngestionService(ILogger<TelemetryIngestionService> logger)
     : TelemetryIngestor.TelemetryIngestorBase
 {
+    private static readonly Meter Meter = new("PulseGuard.Telemetry.Grpc");
+    private static readonly Counter<long> AcceptedMeasurements = Meter.CreateCounter<long>(
+        "pulseguard.telemetry.measurements.accepted",
+        description: "Number of accepted synthetic telemetry measurements.");
+    private static readonly Counter<long> RejectedMeasurements = Meter.CreateCounter<long>(
+        "pulseguard.telemetry.measurements.rejected",
+        description: "Number of rejected synthetic telemetry measurements.");
+
     public override async Task<IngestionSummary> Ingest(
         IAsyncStreamReader<VitalMeasurement> requestStream,
         ServerCallContext context)
@@ -18,6 +27,9 @@ public sealed partial class TelemetryIngestionService(ILogger<TelemetryIngestion
             if (IsValid(measurement))
             {
                 accepted++;
+                AcceptedMeasurements.Add(
+                    1,
+                    new KeyValuePair<string, object?>("vital.type", measurement.Type.ToString()));
                 LogMeasurementAccepted(
                     logger,
                     measurement.Type,
@@ -27,6 +39,7 @@ public sealed partial class TelemetryIngestionService(ILogger<TelemetryIngestion
             else
             {
                 rejected++;
+                RejectedMeasurements.Add(1);
                 LogMeasurementRejected(logger, measurement.MeasurementId);
             }
         }

@@ -1,7 +1,9 @@
+using PulseGuard.Framework.Observability;
 using PulseGuard.Framework.Security;
 using PulseGuard.Telemetry.Grpc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.AddPulseGuardObservability();
 
 builder.Services.AddGrpc();
 builder.Services.AddHealthChecks();

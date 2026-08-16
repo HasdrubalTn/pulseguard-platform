@@ -26,6 +26,7 @@ function Invoke-CheckedCommand {
 Push-Location $repositoryRoot
 try {
     if (-not $SkipRestore) {
+        Invoke-CheckedCommand -FilePath 'dotnet' -Arguments @('tool', 'restore')
         Invoke-CheckedCommand -FilePath 'dotnet' -Arguments @('restore', 'PulseGuard.slnx')
     }
 
@@ -42,6 +43,21 @@ try {
         '--configuration',
         'Release',
         '--no-restore'
+    )
+
+    Invoke-CheckedCommand -FilePath 'dotnet' -Arguments @(
+        'ef',
+        'migrations',
+        'has-pending-model-changes',
+        '--no-build',
+        '--configuration',
+        'Release',
+        '--project',
+        'src/Services/PatientRegistry/PulseGuard.PatientRegistry.Infrastructure',
+        '--startup-project',
+        'src/Services/PatientRegistry/PulseGuard.PatientRegistry.Api',
+        '--context',
+        'PatientRegistryDbContext'
     )
 
     $testArguments = @(
