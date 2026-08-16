@@ -22,9 +22,9 @@ public sealed class PatientTests
     [Fact]
     public void RegisterWithFutureBirthDateThrows()
     {
-        DateOnly tomorrow = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1));
+        DateOnly futureBirthDate = new(3000, 1, 1);
 
-        Action act = () => Patient.Register("MRN-1", "Jane", "Doe", tomorrow, TimeProvider.System);
+        Action act = () => Patient.Register("MRN-1", "Jane", "Doe", futureBirthDate, TimeProvider.System);
 
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
