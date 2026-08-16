@@ -4,6 +4,7 @@
     <Project Path="src/BuildingBlocks/PulseGuard.Framework.Domain/PulseGuard.Framework.Domain.csproj" />
     <Project Path="src/BuildingBlocks/PulseGuard.Framework.Hl7/PulseGuard.Framework.Hl7.csproj" />
     <Project Path="src/BuildingBlocks/PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+    <Project Path="src/BuildingBlocks/PulseGuard.Framework.Messaging.RabbitMq/PulseGuard.Framework.Messaging.RabbitMq.csproj" />
     <Project Path="src/BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
     <Project Path="src/BuildingBlocks/PulseGuard.Framework.Security/PulseGuard.Framework.Security.csproj" />
   </Folder>
@@ -29,6 +30,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/PulseGuard.ArchitectureTests/PulseGuard.ArchitectureTests.csproj" />
     <Project Path="tests/PulseGuard.Framework.Hl7.UnitTests/PulseGuard.Framework.Hl7.UnitTests.csproj" />
+    <Project Path="tests/PulseGuard.Framework.Messaging.RabbitMq.UnitTests/PulseGuard.Framework.Messaging.RabbitMq.UnitTests.csproj" />
     <Project Path="tests/PulseGuard.PatientRegistry.UnitTests/PulseGuard.PatientRegistry.UnitTests.csproj" />
     <Project Path="tests/PulseGuard.PatientRegistry.Infrastructure.UnitTests/PulseGuard.PatientRegistry.Infrastructure.UnitTests.csproj" />
   </Folder>

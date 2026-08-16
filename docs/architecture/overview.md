@@ -52,18 +52,18 @@ sequenceDiagram
     participant HIS as Hospital system
     participant MLLP as MLLP listener
     participant ACL as HL7 anti-corruption layer
-    participant BUS as Event publisher
+    participant BUS as RabbitMQ topic exchange
 
     HIS->>MLLP: VT + ORU R01 + FS CR
     MLLP->>MLLP: Bound size and timeout
     MLLP->>ACL: Decode ER7 message
     ACL->>ACL: Validate MSH envelope
     ACL->>BUS: Hl7MessageReceived v1
-    BUS-->>ACL: Accepted
+    BUS-->>ACL: Publisher confirm
     ACL-->>HIS: ACK AA in MLLP frame
 ```
 
-Le premier slice publie l'événement dans un adapter de log afin de garder le chemin compilable sans broker. L'étape suivante remplacera cet adapter par RabbitMQ avec Outbox/Inbox et idempotence. Les payloads bruts ne sont pas propagés ni journalisés.
+Le Device Gateway publie l'événement versionné dans le topic exchange durable `pulseguard.events`. Le message est persistant et le publisher attend la confirmation du broker avant de retourner un ACK `AA`. Cette confirmation protège le transfert vers RabbitMQ, mais ne rend pas atomiques le traitement HL7 et la publication. L'Outbox/Inbox et l'idempotence restent nécessaires dans les prochains incréments de Phase 2. Les payloads bruts ne sont ni propagés ni journalisés.
 
 ## Trust boundaries
 

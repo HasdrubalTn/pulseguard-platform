@@ -1,6 +1,6 @@
 using PulseGuard.DeviceGateway;
 using PulseGuard.Framework.Hl7;
-using PulseGuard.Framework.Messaging;
+using PulseGuard.Framework.Messaging.RabbitMq;
 using PulseGuard.Framework.Observability;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -19,7 +19,7 @@ builder.Services
 
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<Hl7AcknowledgementFactory>();
-builder.Services.AddSingleton<IIntegrationEventPublisher, LoggingIntegrationEventPublisher>();
+builder.Services.AddRabbitMqIntegrationEventPublisher(builder.Configuration);
 builder.Services.AddSingleton<Hl7MessageProcessor>();
 builder.Services.AddHostedService<MllpListenerService>();
 
