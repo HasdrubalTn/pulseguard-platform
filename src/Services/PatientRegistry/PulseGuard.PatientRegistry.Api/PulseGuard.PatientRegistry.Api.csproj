@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>pulseguard-patient-registry-api</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Cqrs/PulseGuard.Framework.Cqrs.csproj" />
+    <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Security/PulseGuard.Framework.Security.csproj" />
     <ProjectReference Include="../PulseGuard.PatientRegistry.Application/PulseGuard.PatientRegistry.Application.csproj" />
     <ProjectReference Include="../PulseGuard.PatientRegistry.Contracts/PulseGuard.PatientRegistry.Contracts.csproj" />

@@ -38,7 +38,7 @@ L'architecture complète est décrite dans [docs/architecture/overview.md](docs/
 - Git for Windows et GitHub CLI (`gh`) ;
 - PowerShell 7 recommandé ;
 - un certificat HTTPS de développement (`dotnet dev-certs https --trust`) ;
-- Docker Desktop, facultatif pour les dépendances d'infrastructure futures.
+- Docker Desktop pour PostgreSQL, RabbitMQ et l'OpenTelemetry Collector.
 
 Le workflow développeur et la CI sont Windows-first. Les projets .NET restent portables, mais toutes les commandes documentées et automatisées utilisent PowerShell.
 
@@ -51,7 +51,13 @@ npm run prepare
 .\eng\verify.ps1
 ```
 
-Le script génère un secret client aléatoire, l'enregistre avec `.NET User Secrets` et l'affiche une seule fois afin de le copier dans la variable Postman `clientSecret`, marquée comme secret. Aucune credential n'est versionnée.
+Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre la chaîne PostgreSQL avec `.NET User Secrets`. Le secret client Duende est affiché une seule fois afin de le copier dans la variable Postman `clientSecret`, marquée comme secret. Aucune credential n'est versionnée.
+
+Les migrations PostgreSQL peuvent aussi être appliquées explicitement :
+
+```powershell
+.\eng\apply-migrations.ps1
+```
 
 ## Démarrage local
 

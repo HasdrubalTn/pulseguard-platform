@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PulseGuard.Framework.Cqrs;
+using PulseGuard.Framework.Observability;
 using PulseGuard.Framework.Security;
 using PulseGuard.PatientRegistry.Application;
 using PulseGuard.PatientRegistry.Contracts;
@@ -12,12 +13,18 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
+builder.AddPulseGuardObservability();
 builder.Services.AddPulseGuardOidc(builder.Configuration, "pulseguard.patient.read", "pulseguard.patient.write");
+builder.Services.AddPatientRegistryInfrastructure(builder.Configuration);
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddSingleton<IPatientRepository, InMemoryPatientRepository>();
 builder.Services.AddScoped<ICommandHandler<RegisterPatientCommand, RegisterPatientResult>, RegisterPatientHandler>();
 
 WebApplication app = builder.Build();
+
+if (builder.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
+{
+    await app.Services.ApplyPatientRegistryMigrationsAsync();
+}
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();

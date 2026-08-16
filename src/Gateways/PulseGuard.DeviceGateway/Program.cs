@@ -1,8 +1,10 @@
 using PulseGuard.DeviceGateway;
 using PulseGuard.Framework.Hl7;
 using PulseGuard.Framework.Messaging;
+using PulseGuard.Framework.Observability;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.AddPulseGuardObservability();
 
 builder.Services.AddHealthChecks();
 builder.Services

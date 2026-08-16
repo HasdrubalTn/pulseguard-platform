@@ -10,8 +10,8 @@
 - [x] gRPC client-streaming telemetry contract
 - [x] Duende IdentityServer OIDC host
 - [x] Unit and architecture tests
-- [ ] Persistent PostgreSQL repositories and migrations
-- [ ] OpenTelemetry logs, metrics, and traces
+- [x] Persistent PostgreSQL repositories and migrations
+- [x] OpenTelemetry logs, metrics, and traces
 
 ## Phase 2 — Reliable asynchronous processing
 

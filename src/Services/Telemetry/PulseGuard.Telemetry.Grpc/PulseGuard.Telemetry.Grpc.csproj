@@ -8,6 +8,7 @@
     <PackageReference Include="Grpc.AspNetCore" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Security/PulseGuard.Framework.Security.csproj" />
+    <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
     <Protobuf Include="../../../../contracts/protobuf/telemetry.proto" GrpcServices="Server" Link="Protos/telemetry.proto" />
   </ItemGroup>
 </Project>
