@@ -8,7 +8,7 @@ namespace PulseGuard.ArchitectureTests;
 public sealed class CleanArchitectureDependencyTests
 {
     [Fact]
-    public void Domain_DoesNotReferenceOuterLayers()
+    public void DomainDoesNotReferenceOuterLayers()
     {
         Assembly domainAssembly = typeof(Patient).Assembly;
 
@@ -22,7 +22,7 @@ public sealed class CleanArchitectureDependencyTests
     }
 
     [Fact]
-    public void Application_DoesNotReferenceInfrastructureOrApi()
+    public void ApplicationDoesNotReferenceInfrastructureOrApi()
     {
         Assembly applicationAssembly = typeof(RegisterPatientCommand).Assembly;
 

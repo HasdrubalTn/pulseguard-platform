@@ -17,12 +17,12 @@ public sealed class RegisterPatientHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_WhenMedicalRecordNumberIsAvailable_ReturnsRegisteredPatient()
+    public async Task HandleAsyncWhenMedicalRecordNumberIsAvailableReturnsRegisteredPatient()
     {
         IPatientRepository repository = _fixture.Freeze<IPatientRepository>();
         repository
             .TryAddAsync(Arg.Any<Patient>(), Arg.Any<CancellationToken>())
-            .Returns(ValueTask.FromResult(true));
+            .Returns(true);
 
         RegisterPatientHandler sut = new(repository, TimeProvider.System);
         RegisterPatientCommand command = _fixture
@@ -38,12 +38,12 @@ public sealed class RegisterPatientHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_WhenMedicalRecordNumberAlreadyExists_ReturnsConflictResult()
+    public async Task HandleAsyncWhenMedicalRecordNumberAlreadyExistsReturnsConflictResult()
     {
         IPatientRepository repository = _fixture.Freeze<IPatientRepository>();
         repository
             .TryAddAsync(Arg.Any<Patient>(), Arg.Any<CancellationToken>())
-            .Returns(ValueTask.FromResult(false));
+            .Returns(false);
 
         RegisterPatientHandler sut = new(repository, TimeProvider.System);
         RegisterPatientCommand command = _fixture

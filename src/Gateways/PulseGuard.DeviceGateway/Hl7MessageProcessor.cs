@@ -4,7 +4,6 @@ using PulseGuard.Framework.Messaging;
 namespace PulseGuard.DeviceGateway;
 
 public sealed partial class Hl7MessageProcessor(
-    Hl7MessageParser parser,
     Hl7AcknowledgementFactory acknowledgementFactory,
     IIntegrationEventPublisher publisher,
     TimeProvider timeProvider,
@@ -12,7 +11,7 @@ public sealed partial class Hl7MessageProcessor(
 {
     public async ValueTask<string> ProcessAsync(string payload, CancellationToken cancellationToken)
     {
-        Hl7Message message = parser.Parse(payload);
+        Hl7Message message = Hl7MessageParser.Parse(payload);
 
         // Raw clinical payloads are intentionally excluded from logs to avoid leaking sensitive data.
         LogMessageReceived(

@@ -10,7 +10,7 @@ public sealed class MllpFrameDecoderTests
     private readonly Fixture _fixture = new();
 
     [Fact]
-    public void Feed_WithFragmentedFrame_ReturnsFrameOnlyAfterTerminator()
+    public void FeedWithFragmentedFrameReturnsFrameOnlyAfterTerminator()
     {
         string message = $"MSH|^~\\&|APP|FAC|PG|PG|20260816120000||ADT^A01|{_fixture.Create<Guid>():N}|P|2.5.1\r";
         byte[] frame = MllpProtocol.Frame(message);
@@ -25,7 +25,7 @@ public sealed class MllpFrameDecoderTests
     }
 
     [Fact]
-    public void Feed_WhenPayloadExceedsLimit_ThrowsAndResetsDecoder()
+    public void FeedWhenPayloadExceedsLimitThrowsAndResetsDecoder()
     {
         MllpFrameDecoder sut = new(maximumPayloadBytes: 4);
         byte[] oversized = [MllpProtocol.StartBlock, 1, 2, 3, 4, 5];

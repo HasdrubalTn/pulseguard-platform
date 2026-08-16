@@ -25,6 +25,6 @@ byte[] responseBuffer = new byte[16 * 1024];
 int bytesRead = await stream.ReadAsync(responseBuffer);
 MllpFrameDecoder decoder = new();
 byte[] acknowledgement = decoder.Feed(responseBuffer.AsSpan(0, bytesRead)).Single();
-Hl7Message parsedAcknowledgement = new Hl7MessageParser().Parse(Encoding.UTF8.GetString(acknowledgement));
+Hl7Message parsedAcknowledgement = Hl7MessageParser.Parse(Encoding.UTF8.GetString(acknowledgement));
 
 Console.WriteLine($"Received {parsedAcknowledgement.MessageCode} for control ID {parsedAcknowledgement.FindSegment("MSA")?.GetField(2)}");

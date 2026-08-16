@@ -7,15 +7,14 @@ namespace PulseGuard.Framework.Hl7.UnitTests;
 public sealed class Hl7MessageParserTests
 {
     private readonly Fixture _fixture = new();
-    private readonly Hl7MessageParser _sut = new();
 
     [Fact]
-    public void Parse_WithValidOruMessage_ExtractsEnvelopeMetadata()
+    public void ParseWithValidOruMessageExtractsEnvelopeMetadata()
     {
         string controlId = _fixture.Create<Guid>().ToString("N");
         string message = CreateOruMessage(controlId);
 
-        Hl7Message result = _sut.Parse(message);
+        Hl7Message result = Hl7MessageParser.Parse(message);
 
         result.MessageCode.Should().Be("ORU");
         result.TriggerEvent.Should().Be("R01");
@@ -26,9 +25,9 @@ public sealed class Hl7MessageParserTests
     }
 
     [Fact]
-    public void Parse_WithEmptyPayload_ThrowsArgumentException()
+    public void ParseWithEmptyPayloadThrowsArgumentException()
     {
-        Action act = () => _sut.Parse(string.Empty);
+        Action act = () => Hl7MessageParser.Parse(string.Empty);
 
         act.Should().Throw<ArgumentException>();
     }
@@ -36,9 +35,9 @@ public sealed class Hl7MessageParserTests
     [Theory]
     [InlineData("PID|1||patient")]
     [InlineData("MSH|^~\\&|APP|FAC|PG|PG|20260816120000||ORU^R01||P|2.5.1")]
-    public void Parse_WithInvalidEnvelope_ThrowsFormatException(string message)
+    public void ParseWithInvalidEnvelopeThrowsFormatException(string message)
     {
-        Action act = () => _sut.Parse(message);
+        Action act = () => Hl7MessageParser.Parse(message);
 
         act.Should().Throw<FormatException>();
     }

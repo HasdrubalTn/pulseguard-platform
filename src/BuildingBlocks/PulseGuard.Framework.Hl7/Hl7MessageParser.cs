@@ -1,10 +1,10 @@
 namespace PulseGuard.Framework.Hl7;
 
-public sealed class Hl7MessageParser
+public static class Hl7MessageParser
 {
     private const int MinimumHeaderLength = 4;
 
-    public Hl7Message Parse(string rawMessage)
+    public static Hl7Message Parse(string rawMessage)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(rawMessage);
 

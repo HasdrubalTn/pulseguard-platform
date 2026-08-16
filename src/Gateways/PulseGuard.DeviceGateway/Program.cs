@@ -16,7 +16,6 @@ builder.Services
     .ValidateOnStart();
 
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddSingleton<Hl7MessageParser>();
 builder.Services.AddSingleton<Hl7AcknowledgementFactory>();
 builder.Services.AddSingleton<IIntegrationEventPublisher, LoggingIntegrationEventPublisher>();
 builder.Services.AddSingleton<Hl7MessageProcessor>();

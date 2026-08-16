@@ -6,7 +6,7 @@ namespace PulseGuard.PatientRegistry.UnitTests;
 public sealed class PatientTests
 {
     [Fact]
-    public void Register_WithValidData_NormalizesMedicalRecordNumberAndRaisesEvent()
+    public void RegisterWithValidDataNormalizesMedicalRecordNumberAndRaisesEvent()
     {
         Patient patient = Patient.Register(
             " mrn-00042 ",
@@ -20,7 +20,7 @@ public sealed class PatientTests
     }
 
     [Fact]
-    public void Register_WithFutureBirthDate_Throws()
+    public void RegisterWithFutureBirthDateThrows()
     {
         DateOnly tomorrow = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1));
 
