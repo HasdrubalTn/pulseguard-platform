@@ -1,6 +1,10 @@
 # Postman scenarios
 
-Importer la collection REST/FHIR et l'environnement local, démarrer Identity et Patient Registry, puis exécuter les requêtes dans l'ordre.
+Importer la collection REST/FHIR et `environments/PulseGuard.local.postman_environment.json`, puis sélectionner **PulseGuard Local** dans le menu d'environnement de Postman. Coller le secret généré par `eng/initialize-development.ps1` dans la valeur courante de `clientSecret`.
+
+Les URL locales sont également définies au niveau de la collection pour éviter les erreurs DNS lorsqu'aucun environnement n'est sélectionné. Les scripts pré-requête interrompent les appels et affichent une consigne explicite lorsqu'un secret, un token ou un identifiant de patient manque.
+
+Démarrer Identity et Patient Registry, puis exécuter les requêtes dans l'ordre.
 
 Pour gRPC, importer directement `contracts/protobuf/telemetry.proto` dans Postman et appeler :
 

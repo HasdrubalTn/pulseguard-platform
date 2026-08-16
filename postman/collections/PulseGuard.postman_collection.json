@@ -5,15 +5,33 @@
     "description": "Synthetic-data scenarios for Duende OIDC, REST, and FHIR R4.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    { "key": "identityBaseUrl", "value": "https://localhost:5001", "type": "string" },
+    { "key": "patientApiBaseUrl", "value": "https://localhost:5101", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "patientId", "value": "", "type": "string" }
+  ],
   "item": [
     {
       "name": "01 - Get OIDC token",
       "event": [
         {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "if (!pm.variables.get('clientSecret')) {",
+              "  console.error('Missing clientSecret. Import and select the PulseGuard Local environment, then set its current value.');",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
           "listen": "test",
           "script": {
             "exec": [
               "pm.test('Token returned', function () { pm.response.to.have.status(200); });",
+              "pm.collectionVariables.set('accessToken', pm.response.json().access_token);",
               "pm.environment.set('accessToken', pm.response.json().access_token);"
             ]
           }
@@ -40,10 +58,22 @@
       "name": "02 - Register synthetic patient",
       "event": [
         {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "if (!pm.variables.get('accessToken')) {",
+              "  console.error('Missing accessToken. Run 01 - Get OIDC token first.');",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        },
+        {
           "listen": "test",
           "script": {
             "exec": [
               "pm.test('Patient created', function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set('patientId', pm.response.json().id);",
               "pm.environment.set('patientId', pm.response.json().id);"
             ]
           }
@@ -62,6 +92,19 @@
     },
     {
       "name": "03 - Get FHIR R4 patient",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "if (!pm.variables.get('accessToken') || !pm.variables.get('patientId')) {",
+              "  console.error('Missing accessToken or patientId. Run requests 01 and 02 first.');",
+              "  pm.execution.skipRequest();",
+              "}"
+            ]
+          }
+        }
+      ],
       "request": {
         "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
         "method": "GET",
