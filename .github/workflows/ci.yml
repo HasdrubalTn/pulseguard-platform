@@ -31,6 +31,10 @@ jobs:
         shell: powershell
         run: ./eng/test-development-secrets.ps1
 
+      - name: Verify Postman collection variables
+        shell: powershell
+        run: ./eng/test-postman-collection.ps1
+
       - name: Verify solution
         shell: pwsh
         run: ./eng/verify.ps1 -CollectCoverage
