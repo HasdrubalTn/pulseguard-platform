@@ -1,7 +1,8 @@
 {
   "sdk": {
     "version": "10.0.108",
-    "rollForward": "latestPatch",
-    "allowPrerelease": false
+    "rollForward": "latestFeature",
+    "allowPrerelease": false,
+    "errorMessage": "PulseGuard requires .NET SDK 10.0.108 or a later .NET 10 feature band. Install a compatible .NET 10 SDK and run dotnet --list-sdks."
   }
 }

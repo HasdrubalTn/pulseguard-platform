@@ -34,7 +34,7 @@ L'architecture complète est décrite dans [docs/architecture/overview.md](docs/
 
 ## Environnement Windows
 
-- .NET SDK `10.0.108` ou patch compatible défini dans `global.json` ;
+- .NET SDK `10.0.108` ou feature band .NET 10 stable supérieur, tel que `10.0.300`, conformément à `global.json` ;
 - Node.js 22 ou supérieur pour Husky et Commitlint ;
 - Git for Windows et GitHub CLI (`gh`) ;
 - PowerShell 7 recommandé ;
