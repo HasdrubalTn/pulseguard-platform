@@ -1,7 +1,7 @@
 asyncapi: 3.0.0
 info:
   title: PulseGuard Integration Events
-  version: 0.1.0
+  version: 0.2.0
   description: Versioned events emitted by PulseGuard bounded contexts. All examples are synthetic.
 servers:
   localRabbitMq:
@@ -14,11 +14,20 @@ channels:
     messages:
       hl7MessageReceived:
         $ref: '#/components/messages/Hl7MessageReceived'
+  patientRegistered:
+    address: pulseguard.patient-registry.patient-registered.v1
+    messages:
+      patientRegistered:
+        $ref: '#/components/messages/PatientRegistered'
 operations:
   publishHl7MessageReceived:
     action: send
     channel:
       $ref: '#/channels/hl7MessageReceived'
+  publishPatientRegistered:
+    action: send
+    channel:
+      $ref: '#/channels/patientRegistered'
 components:
   messages:
     Hl7MessageReceived:
@@ -26,7 +35,33 @@ components:
       title: HL7 message envelope accepted
       payload:
         $ref: '#/components/schemas/Hl7MessageReceivedPayload'
+    PatientRegistered:
+      name: PatientRegistered
+      title: Patient registration committed
+      payload:
+        $ref: '#/components/schemas/PatientRegisteredPayload'
   schemas:
+    PatientRegisteredPayload:
+      type: object
+      additionalProperties: false
+      required:
+        - eventId
+        - occurredOnUtc
+        - schemaVersion
+        - patientId
+      properties:
+        eventId:
+          type: string
+          format: uuid
+        occurredOnUtc:
+          type: string
+          format: date-time
+        schemaVersion:
+          type: integer
+          const: 1
+        patientId:
+          type: string
+          format: uuid
     Hl7MessageReceivedPayload:
       type: object
       additionalProperties: false

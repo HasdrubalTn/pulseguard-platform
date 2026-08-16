@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PulseGuard.Framework.Messaging.EntityFrameworkCore</PackageId>
+    <Description>Transactional Outbox and Inbox persistence for PulseGuard services using EF Core.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <ProjectReference Include="../PulseGuard.Framework.Domain/PulseGuard.Framework.Domain.csproj" />
+    <ProjectReference Include="../PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+  </ItemGroup>
+</Project>

@@ -2,4 +2,8 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Messaging/PulseGuard.Framework.Messaging.csproj" />
+  </ItemGroup>
 </Project>

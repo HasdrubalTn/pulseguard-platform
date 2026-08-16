@@ -25,7 +25,33 @@ Les attributs de télémétrie ne doivent jamais contenir un payload HL7 brut, u
 
 ## Persistance Patient Registry
 
-L'Application dépend uniquement de `IPatientRepository`. L'Infrastructure fournit `PostgresPatientRepository` avec EF Core et Npgsql, un mapping explicite du strong ID `PatientId`, une contrainte unique sur le numéro de dossier médical et une migration versionnée. Le schema PostgreSQL `patient_registry` évite le couplage de tables entre bounded contexts.
+L'Application dépend uniquement de `IPatientRepository`. L'Infrastructure fournit `PostgresPatientRepository` avec EF Core et Npgsql, un mapping explicite du strong ID `PatientId`, une contrainte unique sur le numéro de dossier médical et des migrations versionnées. Le schema PostgreSQL `patient_registry` évite le couplage de tables entre bounded contexts.
+
+## Outbox et Inbox transactionnelles
+
+Le building block `PulseGuard.Framework.Messaging.EntityFrameworkCore` ajoute deux primitives locales à chaque contexte persistant :
+
+- l'Outbox conserve l'intention de publier un Integration Event dans la même transaction que l'agrégat ;
+- l'Inbox utilise l'ID de l'événement comme clé d'idempotence et conserve une empreinte SHA-256 du contenu ;
+- le dispatcher ne marque un message publié qu'après la confirmation RabbitMQ ;
+- un doublon reste possible si le processus s'arrête entre la confirmation du broker et la mise à jour PostgreSQL.
+
+```mermaid
+sequenceDiagram
+    participant API as Patient API
+    participant DB as PostgreSQL
+    participant OUT as Outbox dispatcher
+    participant BUS as RabbitMQ
+
+    API->>DB: Commit Patient + Outbox row
+    DB-->>API: Transaction committed
+    OUT->>DB: Read pending row
+    OUT->>BUS: PatientRegistered v1
+    BUS-->>OUT: Publisher confirm
+    OUT->>DB: Mark published
+```
+
+Le futur consommateur de télémétrie enregistrera l'Inbox et ses effets métier dans une seule transaction. L'idempotence du consommateur, les retries avec jitter et la DLQ restent des incréments distincts de la Phase 2.
 
 ## Clean Architecture d'un contexte
 
@@ -63,7 +89,7 @@ sequenceDiagram
     ACL-->>HIS: ACK AA in MLLP frame
 ```
 
-Le Device Gateway publie l'événement versionné dans le topic exchange durable `pulseguard.events`. Le message est persistant et le publisher attend la confirmation du broker avant de retourner un ACK `AA`. Cette confirmation protège le transfert vers RabbitMQ, mais ne rend pas atomiques le traitement HL7 et la publication. L'Outbox/Inbox et l'idempotence restent nécessaires dans les prochains incréments de Phase 2. Les payloads bruts ne sont ni propagés ni journalisés.
+Le Device Gateway publie l'événement versionné dans le topic exchange durable `pulseguard.events`. Le message est persistant et le publisher attend la confirmation du broker avant de retourner un ACK `AA`. Cette confirmation protège le transfert vers RabbitMQ, mais ne rend pas atomiques le traitement HL7 et la publication, car ce gateway ne possède encore aucun stockage local. Les payloads bruts ne sont ni propagés ni journalisés.
 
 ## Trust boundaries
 

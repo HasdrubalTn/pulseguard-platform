@@ -2,6 +2,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using PulseGuard.Framework.Messaging.EntityFrameworkCore;
 using PulseGuard.PatientRegistry.Domain;
 using PulseGuard.PatientRegistry.Infrastructure;
 
@@ -38,11 +39,28 @@ public sealed class PatientRegistryDbContextTests
     }
 
     [Fact]
+    public void ModelKeepsTransactionalMessagesInsidePatientRegistrySchema()
+    {
+        using PatientRegistryDbContext sut = CreateContext();
+
+        IEntityType outbox = sut.Model.FindEntityType(typeof(OutboxMessage))!;
+        IEntityType inbox = sut.Model.FindEntityType(typeof(InboxMessage))!;
+
+        outbox.GetSchema().Should().Be("patient_registry");
+        outbox.GetTableName().Should().Be("outbox_messages");
+        outbox.FindProperty(nameof(OutboxMessage.Payload))!.GetColumnType().Should().Be("jsonb");
+        inbox.GetSchema().Should().Be("patient_registry");
+        inbox.GetTableName().Should().Be("inbox_messages");
+    }
+
+    [Fact]
     public void ContextDiscoversInitialMigration()
     {
         using PatientRegistryDbContext sut = CreateContext();
 
-        sut.Database.GetMigrations().Should().ContainSingle("20260816190000_InitialPatientRegistry");
+        sut.Database.GetMigrations().Should().Equal(
+            "20260816190000_InitialPatientRegistry",
+            "20260816213000_AddTransactionalOutboxAndInbox");
     }
 
     private PatientRegistryDbContext CreateContext()

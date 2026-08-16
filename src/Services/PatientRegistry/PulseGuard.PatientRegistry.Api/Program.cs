@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PulseGuard.Framework.Cqrs;
+using PulseGuard.Framework.Messaging.RabbitMq;
 using PulseGuard.Framework.Observability;
 using PulseGuard.Framework.Security;
 using PulseGuard.PatientRegistry.Application;
@@ -15,6 +16,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 builder.AddPulseGuardObservability();
 builder.Services.AddPulseGuardOidc(builder.Configuration, "pulseguard.patient.read", "pulseguard.patient.write");
+builder.Services.AddRabbitMqIntegrationEventPublisher(builder.Configuration);
 builder.Services.AddPatientRegistryInfrastructure(builder.Configuration);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<ICommandHandler<RegisterPatientCommand, RegisterPatientResult>, RegisterPatientHandler>();
