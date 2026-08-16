@@ -14,6 +14,7 @@ public sealed class RegisterPatientHandlerTests
     public RegisterPatientHandlerTests()
     {
         _fixture.Customize(new AutoNSubstituteCustomization());
+        _fixture.Register(() => new DateOnly(1980, 1, 1));
     }
 
     [Fact]
@@ -25,10 +26,7 @@ public sealed class RegisterPatientHandlerTests
             .Returns(true);
 
         RegisterPatientHandler sut = new(repository, TimeProvider.System);
-        RegisterPatientCommand command = _fixture
-            .Build<RegisterPatientCommand>()
-            .With(candidate => candidate.BirthDate, new DateOnly(1980, 1, 1))
-            .Create();
+        RegisterPatientCommand command = _fixture.Create<RegisterPatientCommand>();
 
         RegisterPatientResult result = await sut.HandleAsync(command, CancellationToken.None);
 
@@ -46,10 +44,7 @@ public sealed class RegisterPatientHandlerTests
             .Returns(false);
 
         RegisterPatientHandler sut = new(repository, TimeProvider.System);
-        RegisterPatientCommand command = _fixture
-            .Build<RegisterPatientCommand>()
-            .With(candidate => candidate.BirthDate, new DateOnly(1980, 1, 1))
-            .Create();
+        RegisterPatientCommand command = _fixture.Create<RegisterPatientCommand>();
 
         RegisterPatientResult result = await sut.HandleAsync(command, CancellationToken.None);
 
