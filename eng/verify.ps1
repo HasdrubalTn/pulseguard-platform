@@ -60,6 +60,21 @@ try {
         'PatientRegistryDbContext'
     )
 
+    Invoke-CheckedCommand -FilePath 'dotnet' -Arguments @(
+        'ef',
+        'migrations',
+        'has-pending-model-changes',
+        '--no-build',
+        '--configuration',
+        'Release',
+        '--project',
+        'src/Services/Telemetry/PulseGuard.Telemetry.Infrastructure',
+        '--startup-project',
+        'src/Services/Telemetry/PulseGuard.Telemetry.Grpc',
+        '--context',
+        'TelemetryDbContext'
+    )
+
     $testArguments = @(
         'test',
         'PulseGuard.slnx',

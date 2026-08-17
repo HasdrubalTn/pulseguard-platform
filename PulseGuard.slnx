@@ -23,7 +23,10 @@
     <Project Path="src/Services/PatientRegistry/PulseGuard.PatientRegistry.Infrastructure/PulseGuard.PatientRegistry.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Services/Telemetry/">
+    <Project Path="src/Services/Telemetry/PulseGuard.Telemetry.Application/PulseGuard.Telemetry.Application.csproj" />
+    <Project Path="src/Services/Telemetry/PulseGuard.Telemetry.Domain/PulseGuard.Telemetry.Domain.csproj" />
     <Project Path="src/Services/Telemetry/PulseGuard.Telemetry.Grpc/PulseGuard.Telemetry.Grpc.csproj" />
+    <Project Path="src/Services/Telemetry/PulseGuard.Telemetry.Infrastructure/PulseGuard.Telemetry.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Simulators/">
     <Project Path="src/Simulators/PulseGuard.DeviceSimulator/PulseGuard.DeviceSimulator.csproj" />
@@ -35,5 +38,6 @@
     <Project Path="tests/PulseGuard.Framework.Messaging.RabbitMq.UnitTests/PulseGuard.Framework.Messaging.RabbitMq.UnitTests.csproj" />
     <Project Path="tests/PulseGuard.PatientRegistry.UnitTests/PulseGuard.PatientRegistry.UnitTests.csproj" />
     <Project Path="tests/PulseGuard.PatientRegistry.Infrastructure.UnitTests/PulseGuard.PatientRegistry.Infrastructure.UnitTests.csproj" />
+    <Project Path="tests/PulseGuard.Telemetry.UnitTests/PulseGuard.Telemetry.UnitTests.csproj" />
   </Folder>
 </Solution>

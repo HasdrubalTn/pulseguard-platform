@@ -14,10 +14,10 @@ Le socle exécutable couvre déjà plusieurs styles de communication, chacun ass
 | REST/OpenAPI | Enregistrement et consultation des patients | `PulseGuard.PatientRegistry.Api` |
 | FHIR R4 | Projection interopérable d'un patient | `/fhir/Patient/{id}` |
 | HL7 v2.x/MLLP | Réception de messages hospitaliers legacy sur TCP | `PulseGuard.DeviceGateway` |
-| gRPC client streaming | Ingestion efficace des constantes vitales | `PulseGuard.Telemetry.Grpc` |
+| gRPC client streaming | Ingestion persistante et idempotente des constantes vitales | `PulseGuard.Telemetry.Grpc` |
 | OIDC/OAuth 2.0 | Authentification machine-to-machine et scopes | `PulseGuard.Identity`, basé sur Duende |
 | Integration Events | Publication durable et confirmée vers un topic exchange RabbitMQ | `PulseGuard.Framework.Messaging.RabbitMq` |
-| Outbox / Inbox | Atomicité locale et idempotence par ID d'événement avec EF Core | `PulseGuard.Framework.Messaging.EntityFrameworkCore` |
+| Outbox / Inbox | Atomicité locale et idempotence par ID de message avec EF Core | `PulseGuard.Framework.Messaging.EntityFrameworkCore` |
 
 ```mermaid
 flowchart TD
@@ -54,7 +54,7 @@ npm run prepare
 .\eng\verify.ps1
 ```
 
-Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre la chaîne PostgreSQL ainsi que le mot de passe RabbitMQ avec `.NET User Secrets`. Le secret client Duende est copié dans le presse-papiers Windows afin de le transférer dans la variable Postman `clientSecret`, marquée comme secret, sans l'afficher dans le terminal. Aucune credential n'est versionnée.
+Le script génère des secrets aléatoires, conserve les credentials d'infrastructure dans le fichier local `.env` ignoré par Git et enregistre les chaînes PostgreSQL du Patient Registry et de Telemetry ainsi que le mot de passe RabbitMQ avec `.NET User Secrets`. Le secret client Duende est copié dans le presse-papiers Windows afin de le transférer dans la variable Postman `clientSecret`, marquée comme secret, sans l'afficher dans le terminal. Aucune credential n'est versionnée.
 
 Les migrations PostgreSQL peuvent aussi être appliquées explicitement :
 
