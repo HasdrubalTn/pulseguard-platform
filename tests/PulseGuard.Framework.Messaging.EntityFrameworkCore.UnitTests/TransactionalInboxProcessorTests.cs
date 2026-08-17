@@ -112,7 +112,7 @@ public sealed class TransactionalInboxProcessorTests
             .Options;
         IDbContextFactory<TestDbContext> factory = Substitute.For<IDbContextFactory<TestDbContext>>();
         factory.CreateDbContextAsync(Arg.Any<CancellationToken>())
-            .Returns(_ => ValueTask.FromResult(new TestDbContext(options)));
+            .Returns(_ => Task.FromResult(new TestDbContext(options)));
         TimeProvider timeProvider = Substitute.For<TimeProvider>();
         timeProvider.GetUtcNow().Returns(_fixture.Create<DateTimeOffset>());
         ILogger<TransactionalInboxProcessor<TestDbContext>> logger =

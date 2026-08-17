@@ -69,7 +69,7 @@ public sealed class PostgresTelemetryMeasurementProcessorTests
             .Options;
         IDbContextFactory<TelemetryDbContext> factory = Substitute.For<IDbContextFactory<TelemetryDbContext>>();
         factory.CreateDbContextAsync(Arg.Any<CancellationToken>())
-            .Returns(_ => ValueTask.FromResult(new TelemetryDbContext(options)));
+            .Returns(_ => Task.FromResult(new TelemetryDbContext(options)));
         TimeProvider timeProvider = Substitute.For<TimeProvider>();
         timeProvider.GetUtcNow().Returns(_fixture.Create<DateTimeOffset>());
         ILogger<TransactionalInboxProcessor<TelemetryDbContext>> logger =
