@@ -7,6 +7,7 @@ $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $identityProject = Join-Path $repositoryRoot 'src/Identity/PulseGuard.Identity/PulseGuard.Identity.csproj'
 $deviceGatewayProject = Join-Path $repositoryRoot 'src/Gateways/PulseGuard.DeviceGateway/PulseGuard.DeviceGateway.csproj'
 $patientRegistryProject = Join-Path $repositoryRoot 'src/Services/PatientRegistry/PulseGuard.PatientRegistry.Api/PulseGuard.PatientRegistry.Api.csproj'
+$telemetryProject = Join-Path $repositoryRoot 'src/Services/Telemetry/PulseGuard.Telemetry.Grpc/PulseGuard.Telemetry.Grpc.csproj'
 $environmentFile = Join-Path $repositoryRoot '.env'
 $secretFunctions = Join-Path $PSScriptRoot 'functions/development-secrets.ps1'
 
@@ -39,6 +40,11 @@ if ($LASTEXITCODE -ne 0) {
 & dotnet user-secrets set 'ConnectionStrings:PatientRegistry' $patientRegistryConnectionString --project $patientRegistryProject
 if ($LASTEXITCODE -ne 0) {
     throw 'Unable to store the Patient Registry connection string with .NET User Secrets.'
+}
+
+& dotnet user-secrets set 'ConnectionStrings:Telemetry' $patientRegistryConnectionString --project $telemetryProject
+if ($LASTEXITCODE -ne 0) {
+    throw 'Unable to store the Telemetry connection string with .NET User Secrets.'
 }
 
 & dotnet user-secrets set 'Messaging:RabbitMq:Password' $rabbitMqPassword --project $deviceGatewayProject

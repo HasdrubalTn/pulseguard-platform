@@ -17,7 +17,7 @@
 
 - [x] RabbitMQ transport adapter with publisher confirms
 - [x] Transactional Outbox and Inbox
-- [ ] Idempotent telemetry consumer
+- [x] Idempotent telemetry consumer
 - [ ] Retry with backoff and jitter
 - [ ] Circuit Breaker and Bulkhead
 - [ ] Dead-Letter Queue and replay tooling

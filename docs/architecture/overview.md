@@ -51,7 +51,38 @@ sequenceDiagram
     OUT->>DB: Mark published
 ```
 
-Le futur consommateur de télémétrie enregistrera l'Inbox et ses effets métier dans une seule transaction. L'idempotence du consommateur, les retries avec jitter et la DLQ restent des incréments distincts de la Phase 2.
+Le processeur de télémétrie applique ce contrat en enregistrant l'Inbox et la mesure dans une seule transaction. Les retries avec jitter et la DLQ restent des incréments distincts de la Phase 2.
+
+## Ingestion de télémétrie idempotente
+
+Chaque `VitalMeasurement` gRPC porte un `measurement_id` généré à la source. Telemetry utilise cet identifiant comme clé de la mesure et comme clé d'Inbox :
+
+- une première livraison valide crée la mesure et marque l'Inbox traitée dans le même commit PostgreSQL ;
+- une livraison identique retourne `duplicate` sans rejouer l'effet métier ;
+- le même identifiant associé à un contenu différent est rejeté comme conflit ;
+- chaque mesure du stream utilise un `DbContext` isolé afin qu'un échec ne contamine pas la mesure suivante.
+
+```mermaid
+sequenceDiagram
+    participant DEV as Device
+    participant GRPC as Telemetry gRPC
+    participant IN as Inbox processor
+    participant DB as PostgreSQL
+
+    DEV->>GRPC: VitalMeasurement + measurement_id
+    GRPC->>IN: Validate and fingerprint
+    IN->>DB: Read Inbox key
+    alt First delivery
+        IN->>DB: Commit Inbox + measurement
+        GRPC-->>DEV: accepted
+    else Identical duplicate
+        GRPC-->>DEV: duplicate
+    else Conflicting reuse
+        GRPC-->>DEV: rejected
+    end
+```
+
+La valeur clinique brute et l'identifiant patient ne sont jamais écrits dans les logs ou les attributs OpenTelemetry. Seuls les IDs techniques, le type de mesure et le device technique sont utilisés pour le diagnostic.
 
 ## Clean Architecture d'un contexte
 

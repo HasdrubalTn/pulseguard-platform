@@ -1,14 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>pulseguard-telemetry-grpc</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" />
     <PackageReference Include="Grpc.AspNetCore" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
+    <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Messaging.EntityFrameworkCore/PulseGuard.Framework.Messaging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Security/PulseGuard.Framework.Security.csproj" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
+    <ProjectReference Include="../PulseGuard.Telemetry.Application/PulseGuard.Telemetry.Application.csproj" />
+    <ProjectReference Include="../PulseGuard.Telemetry.Domain/PulseGuard.Telemetry.Domain.csproj" />
+    <ProjectReference Include="../PulseGuard.Telemetry.Infrastructure/PulseGuard.Telemetry.Infrastructure.csproj" />
     <Protobuf Include="../../../../contracts/protobuf/telemetry.proto" GrpcServices="Server" Link="Protos/telemetry.proto" />
   </ItemGroup>
 </Project>

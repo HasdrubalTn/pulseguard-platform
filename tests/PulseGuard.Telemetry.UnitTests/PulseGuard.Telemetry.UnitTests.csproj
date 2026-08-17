@@ -6,13 +6,18 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="AutoFixture.AutoNSubstitute" />
     <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="coverlet.collector" PrivateAssets="all" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
-    <ProjectReference Include="../../src/Services/PatientRegistry/PulseGuard.PatientRegistry.Application/PulseGuard.PatientRegistry.Application.csproj" />
-    <ProjectReference Include="../../src/Services/PatientRegistry/PulseGuard.PatientRegistry.Domain/PulseGuard.PatientRegistry.Domain.csproj" />
+    <ProjectReference Include="../../src/BuildingBlocks/PulseGuard.Framework.Messaging.EntityFrameworkCore/PulseGuard.Framework.Messaging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="../../src/Services/Telemetry/PulseGuard.Telemetry.Application/PulseGuard.Telemetry.Application.csproj" />
     <ProjectReference Include="../../src/Services/Telemetry/PulseGuard.Telemetry.Domain/PulseGuard.Telemetry.Domain.csproj" />
+    <ProjectReference Include="../../src/Services/Telemetry/PulseGuard.Telemetry.Infrastructure/PulseGuard.Telemetry.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

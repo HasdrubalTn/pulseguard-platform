@@ -33,4 +33,5 @@ enum VitalType {
 message IngestionSummary {
   int32 accepted = 1;
   int32 rejected = 2;
+  int32 duplicates = 3;
 }

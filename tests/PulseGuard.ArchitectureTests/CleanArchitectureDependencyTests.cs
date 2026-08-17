@@ -2,6 +2,8 @@ using System.Reflection;
 using FluentAssertions;
 using PulseGuard.PatientRegistry.Application;
 using PulseGuard.PatientRegistry.Domain;
+using PulseGuard.Telemetry.Application;
+using PulseGuard.Telemetry.Domain;
 
 namespace PulseGuard.ArchitectureTests;
 
@@ -10,9 +12,10 @@ public sealed class CleanArchitectureDependencyTests
     [Fact]
     public void DomainDoesNotReferenceOuterLayers()
     {
-        Assembly domainAssembly = typeof(Patient).Assembly;
+        Assembly[] domainAssemblies = [typeof(Patient).Assembly, typeof(TelemetryMeasurement).Assembly];
 
-        string[] forbiddenReferences = GetPulseGuardReferences(domainAssembly)
+        string[] forbiddenReferences = domainAssemblies
+            .SelectMany(GetPulseGuardReferences)
             .Where(reference => reference.Contains(".Application", StringComparison.Ordinal) ||
                                 reference.Contains(".Infrastructure", StringComparison.Ordinal) ||
                                 reference.EndsWith(".Api", StringComparison.Ordinal))
@@ -24,9 +27,14 @@ public sealed class CleanArchitectureDependencyTests
     [Fact]
     public void ApplicationDoesNotReferenceInfrastructureOrApi()
     {
-        Assembly applicationAssembly = typeof(RegisterPatientCommand).Assembly;
+        Assembly[] applicationAssemblies =
+        [
+            typeof(RegisterPatientCommand).Assembly,
+            typeof(TelemetryMeasurementInput).Assembly,
+        ];
 
-        string[] forbiddenReferences = GetPulseGuardReferences(applicationAssembly)
+        string[] forbiddenReferences = applicationAssemblies
+            .SelectMany(GetPulseGuardReferences)
             .Where(reference => reference.Contains(".Infrastructure", StringComparison.Ordinal) ||
                                 reference.EndsWith(".Api", StringComparison.Ordinal))
             .ToArray();

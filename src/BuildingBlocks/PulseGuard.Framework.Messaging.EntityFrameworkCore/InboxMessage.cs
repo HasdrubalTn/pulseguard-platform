@@ -46,6 +46,19 @@ public sealed class InboxMessage
         return new InboxMessage(id, eventType, contentHash, receivedOnUtc);
     }
 
+    public bool HasSameContent(string eventType, ReadOnlySpan<byte> content)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(eventType);
+        if (content.IsEmpty)
+        {
+            throw new ArgumentException("Inbox message content cannot be empty.", nameof(content));
+        }
+
+        string contentHash = Convert.ToHexString(SHA256.HashData(content));
+        return string.Equals(EventType, eventType, StringComparison.Ordinal) &&
+               string.Equals(ContentHash, contentHash, StringComparison.Ordinal);
+    }
+
     public void MarkProcessed(DateTimeOffset processedOnUtc)
     {
         ProcessedOnUtc = processedOnUtc;

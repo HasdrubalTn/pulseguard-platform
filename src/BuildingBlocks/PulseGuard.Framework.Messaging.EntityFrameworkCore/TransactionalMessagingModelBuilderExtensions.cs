@@ -13,7 +13,28 @@ public static class TransactionalMessagingModelBuilderExtensions
         ArgumentNullException.ThrowIfNull(modelBuilder);
         ArgumentException.ThrowIfNullOrWhiteSpace(schema);
 
-        ConfigureOutbox(modelBuilder.Entity<OutboxMessage>(), schema, outboxPayloadColumnType);
+        modelBuilder.AddTransactionalOutbox(schema, outboxPayloadColumnType);
+        modelBuilder.AddTransactionalInbox(schema);
+        return modelBuilder;
+    }
+
+    public static ModelBuilder AddTransactionalOutbox(
+        this ModelBuilder modelBuilder,
+        string schema,
+        string? payloadColumnType = null)
+    {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
+        ArgumentException.ThrowIfNullOrWhiteSpace(schema);
+
+        ConfigureOutbox(modelBuilder.Entity<OutboxMessage>(), schema, payloadColumnType);
+        return modelBuilder;
+    }
+
+    public static ModelBuilder AddTransactionalInbox(this ModelBuilder modelBuilder, string schema)
+    {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
+        ArgumentException.ThrowIfNullOrWhiteSpace(schema);
+
         ConfigureInbox(modelBuilder.Entity<InboxMessage>(), schema);
         return modelBuilder;
     }

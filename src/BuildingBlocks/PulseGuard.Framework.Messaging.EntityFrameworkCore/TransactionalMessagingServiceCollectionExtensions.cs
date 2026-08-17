@@ -6,6 +6,16 @@ namespace PulseGuard.Framework.Messaging.EntityFrameworkCore;
 
 public static class TransactionalMessagingServiceCollectionExtensions
 {
+    public static IServiceCollection AddTransactionalInboxProcessor<TDbContext>(this IServiceCollection services)
+        where TDbContext : DbContext
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        services.TryAddSingleton(TimeProvider.System);
+        services.TryAddSingleton<TransactionalInboxProcessor<TDbContext>>();
+        return services;
+    }
+
     public static IServiceCollection AddTransactionalOutboxDispatcher<TDbContext>(
         this IServiceCollection services,
         Action<TransactionalMessagingOptions> configure)
