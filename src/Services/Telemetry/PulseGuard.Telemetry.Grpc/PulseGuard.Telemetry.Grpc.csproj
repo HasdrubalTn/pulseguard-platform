@@ -8,6 +8,10 @@
     <PackageReference Include="Google.Protobuf" />
     <PackageReference Include="Grpc.AspNetCore" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Messaging.EntityFrameworkCore/PulseGuard.Framework.Messaging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Security/PulseGuard.Framework.Security.csproj" />
     <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Observability/PulseGuard.Framework.Observability.csproj" />
