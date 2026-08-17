@@ -120,7 +120,7 @@ public sealed class TransactionalInboxProcessorTests
         return (new TransactionalInboxProcessor<TestDbContext>(factory, timeProvider, logger), factory);
     }
 
-    private sealed class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(options)
+    public sealed class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(options)
     {
         public DbSet<TestSideEffect> SideEffects => Set<TestSideEffect>();
 
@@ -131,7 +131,7 @@ public sealed class TransactionalInboxProcessorTests
         }
     }
 
-    private sealed class TestSideEffect
+    public sealed class TestSideEffect
     {
         private TestSideEffect()
         {
