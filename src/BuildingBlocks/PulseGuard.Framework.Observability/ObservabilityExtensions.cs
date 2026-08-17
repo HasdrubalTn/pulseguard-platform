@@ -63,6 +63,7 @@ public static class ObservabilityExtensions
             {
                 tracing
                     .AddSource(builder.Environment.ApplicationName)
+                    .AddSource("PulseGuard.Framework.Messaging.EntityFrameworkCore")
                     .AddSource("PulseGuard.Framework.Messaging.RabbitMq")
                     .AddSource("RabbitMQ.Client.*")
                     .AddSource("Npgsql")
@@ -78,6 +79,7 @@ public static class ObservabilityExtensions
             {
                 metrics
                     .AddMeter(builder.Environment.ApplicationName)
+                    .AddMeter("PulseGuard.Framework.Messaging.EntityFrameworkCore")
                     .AddMeter("PulseGuard.Framework.Messaging.RabbitMq")
                     .AddMeter("Npgsql")
                     .AddAspNetCoreInstrumentation()

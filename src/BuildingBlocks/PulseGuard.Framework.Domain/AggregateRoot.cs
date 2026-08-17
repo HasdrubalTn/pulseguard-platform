@@ -1,6 +1,6 @@
 namespace PulseGuard.Framework.Domain;
 
-public abstract class AggregateRoot<TId>
+public abstract class AggregateRoot<TId> : IHasDomainEvents
     where TId : notnull
 {
     private readonly List<IDomainEvent> _domainEvents = [];

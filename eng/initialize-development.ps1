@@ -46,6 +46,11 @@ if ($LASTEXITCODE -ne 0) {
     throw 'Unable to store the Device Gateway RabbitMQ password with .NET User Secrets.'
 }
 
+& dotnet user-secrets set 'Messaging:RabbitMq:Password' $rabbitMqPassword --project $patientRegistryProject
+if ($LASTEXITCODE -ne 0) {
+    throw 'Unable to store the Patient Registry RabbitMQ password with .NET User Secrets.'
+}
+
 $environmentValues = @(
     "POSTGRES_PASSWORD=$postgresPassword"
     'RABBITMQ_DEFAULT_USER=pulseguard'

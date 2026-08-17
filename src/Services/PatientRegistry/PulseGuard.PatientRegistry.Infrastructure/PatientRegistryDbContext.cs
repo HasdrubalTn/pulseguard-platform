@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PulseGuard.Framework.Messaging.EntityFrameworkCore;
 using PulseGuard.PatientRegistry.Domain;
 
 namespace PulseGuard.PatientRegistry.Infrastructure;
@@ -12,5 +13,6 @@ public sealed class PatientRegistryDbContext(DbContextOptions<PatientRegistryDbC
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PatientRegistryDbContext).Assembly);
+        modelBuilder.AddTransactionalMessaging("patient_registry", "jsonb");
     }
 }

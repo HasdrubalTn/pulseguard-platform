@@ -17,6 +17,7 @@ Le socle exécutable couvre déjà plusieurs styles de communication, chacun ass
 | gRPC client streaming | Ingestion efficace des constantes vitales | `PulseGuard.Telemetry.Grpc` |
 | OIDC/OAuth 2.0 | Authentification machine-to-machine et scopes | `PulseGuard.Identity`, basé sur Duende |
 | Integration Events | Publication durable et confirmée vers un topic exchange RabbitMQ | `PulseGuard.Framework.Messaging.RabbitMq` |
+| Outbox / Inbox | Atomicité locale et idempotence par ID d'événement avec EF Core | `PulseGuard.Framework.Messaging.EntityFrameworkCore` |
 
 ```mermaid
 flowchart TD
@@ -26,6 +27,7 @@ flowchart TD
     RMQ --> MON["Monitoring context"]
     TEL --> MON
     API["REST / FHIR API"] --> PAT["Patient Registry"]
+    PAT -->|"Transactional Outbox"| RMQ
     OIDC["Duende OIDC"] --> API
     OIDC --> TEL
 ```

@@ -9,6 +9,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <ProjectReference Include="../../../BuildingBlocks/PulseGuard.Framework.Messaging.EntityFrameworkCore/PulseGuard.Framework.Messaging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="../PulseGuard.PatientRegistry.Application/PulseGuard.PatientRegistry.Application.csproj" />
+    <ProjectReference Include="../PulseGuard.PatientRegistry.Contracts/PulseGuard.PatientRegistry.Contracts.csproj" />
   </ItemGroup>
 </Project>
